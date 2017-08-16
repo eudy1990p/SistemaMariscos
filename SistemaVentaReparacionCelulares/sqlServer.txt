@@ -1,0 +1,135 @@
+﻿create database db_sistema_venta_reparacion_celulares;
+use db_sistema_venta_reparacion_celulares;
+create table usuarios (
+	id int not null IDENTITY(1,1) primary KEY,
+    usuario varchar(100),
+    clave varchar(100),
+    tipo varchar(100) default 'cajero',
+    fecha datetime,
+    usuario_id int,
+	visible bit DEFAULT 1
+);
+create table equipos (
+	id int not null IDENTITY(1,1) primary KEY,
+    marca varchar(100),
+    modelo varchar(100),
+    cantidad_almacen int,
+    precio_venta decimal(20,2),
+    fecha datetime,
+    usuario_id int,
+	visible bit DEFAULT 1
+);
+create table compras (
+	id int not null IDENTITY(1,1) primary KEY,
+    equipo_id int,
+    cantidad int,
+    precio_venta decimal(20,2),
+    precio_compra decimal(20,2),
+    monto_compra decimal(20,2),
+    fecha datetime,
+    usuario_id int,
+    nombre_suplidor varchar(150),
+    telefono_suplidor varchar(150),
+    email_suplidor varchar(150),
+	visible bit DEFAULT 1
+);
+create table factura_ventas (
+	id int not null IDENTITY(1,1) primary KEY,
+    sub_total decimal(20,2),
+    monto_apagar decimal(20,2),
+    monto_itbis decimal(20,2),
+    fecha datetime,
+    usuario_id int,
+    estado varchar(100)  DEFAULT 'pendiente',
+    usuario_id_cancelacion int,
+    motivo_cancelacion text,
+	cliente_id int,
+	visible bit DEFAULT 1
+);
+create table factura_venta_detalle (
+	id int not null IDENTITY(1,1) primary KEY,
+    equipo_id int,
+    cantidad int,
+    monto decimal(20,2),
+    precio decimal(20,2),
+    fecha datetime,
+    usuario_id int,
+    estado varchar(100) DEFAULT 'pendiente',
+    usuario_id_cancelacion int,
+    motivo_cancelacion text,
+	factura_venta_id int,
+	visible bit DEFAULT 1
+);
+
+
+
+
+
+create table factura_reparacion (
+	id int not null IDENTITY(1,1) primary KEY,
+    sub_total decimal(20,2),
+    monto_apagar decimal(20,2),
+    monto_itbis decimal(20,2),
+    fecha datetime,
+    usuario_id int,
+    estado varchar(100)  DEFAULT 'pendiente',
+    usuario_id_cancelacion int,
+    motivo_cancelacion text,
+	cliente_id int,
+	visible bit DEFAULT 1
+);
+create table factura_reparacion_detalle (
+	id int not null IDENTITY(1,1) primary KEY,
+    cantidad int,
+    monto decimal(20,2),
+    precio decimal(20,2),
+    problema text,
+    fecha datetime,
+    usuario_id int,
+    estado varchar(100) DEFAULT 'pendiente',
+    usuario_id_cancelacion int,
+    motivo_cancelacion text,
+	factura_reparacion_id int,
+	equipo_id int,
+	visible bit DEFAULT 1
+);
+
+create table pagos (
+	id int not null IDENTITY(1,1) primary KEY,
+    tipo_factura varchar(100) DEFAULT 'venta',
+    factura_reparacion_id int,
+    factura_venta_id int,
+    monto_pagado decimal(20,2),
+    devuelta decimal(20,2),
+    fecha datetime,
+	tipo_pago VARCHAR(100) default 'EFECTIVO',
+	usuario_id int,
+	visible bit DEFAULT 1
+);
+
+create table clientes (
+  id int not null IDENTITY(1,1) PRIMARY KEY,
+  nombre varchar(150),
+  apellido varchar(150),
+  cedula varchar(40),
+  rnc varchar(60),
+    fecha datetime,
+    usuario_id int,
+	visible bit DEFAULT 1
+);
+create table cliente_telefono(
+  id int not null IDENTITY(1,1) PRIMARY KEY,
+  telefono varchar(150),
+  tipo varchar(100) default 'casa',
+    fecha datetime,
+    usuario_id int,
+	visible bit DEFAULT 1
+);
+
+create table cliente_email(
+  id int not null IDENTITY(1,1) PRIMARY KEY,
+  correo varchar(150),
+  fecha datetime,
+    usuario_id int,
+	visible bit DEFAULT 1
+);

@@ -1,0 +1,133 @@
+﻿create database db_sistema_venta_reparacion_celulares;
+use db_sistema_venta_reparacion_celulares;
+create table usuarios (
+	id int not null AUTO_INCREMENT primary KEY,
+    usuario varchar(100),
+    clave varchar(100),
+    tipo ENUM('cajero','administrador','supervisor'),
+    fecha datetime,
+    usuario_id int
+);
+create table equipos (
+	id int not null AUTO_INCREMENT primary KEY,
+    marca varchar(100),
+    modelo varchar(100),
+    cantidad_almacen int,
+    precio_venta decimal(20,2),
+    fecha datetime,
+    usuario_id int
+);
+create table compras (
+	id int not null AUTO_INCREMENT primary KEY,
+    equipo_id int,
+    cantidad int,
+    precio_venta decimal(20,2),
+    precio_compra decimal(20,2),
+    monto_compra decimal(20,2),
+    fecha datetime,
+    usuario_id int,
+    nombre_suplidor varchar(150),
+    telefono_suplidor varchar(150),
+    email_suplidor varchar(150)
+);
+create table factura_ventas (
+	id int not null AUTO_INCREMENT primary KEY,
+    sub_total decimal(20,2),
+    monto_apagar decimal(20,2),
+    monto_itbis decimal(20,2),
+    fecha datetime,
+    usuario_id int,
+    estado ENUM ('pendiente','pagada','cancelada')  DEFAULT 'pendiente',
+    usuario_id_cancelacion int,
+    motivo_cancelacion text,
+	cliente_id int
+);
+create table factura_venta_detalle (
+	id int not null AUTO_INCREMENT primary KEY,
+    equipo_id int,
+    cantidad int,
+    monto decimal(20,2),
+    precio decimal(20,2),
+    fecha datetime,
+    usuario_id int,
+    estado ENUM ('pendiente','cancelado') DEFAULT 'pendiente',
+    usuario_id_cancelacion int,
+    motivo_cancelacion text,
+	factura_venta_id int
+);
+
+
+
+
+
+create table factura_reparacion (
+	id int not null AUTO_INCREMENT primary KEY,
+    sub_total decimal(20,2),
+    monto_apagar decimal(20,2),
+    monto_itbis decimal(20,2),
+    fecha datetime,
+    usuario_id int,
+    estado ENUM ('pendiente','pagada','cancelada')  DEFAULT 'pendiente',
+    usuario_id_cancelacion int,
+    motivo_cancelacion text,
+	cliente_id int
+);
+create table factura_reparacion_detalle (
+	id int not null AUTO_INCREMENT primary KEY,
+    cantidad int,
+    monto decimal(20,2),
+    precio decimal(20,2),
+    problema text,
+    fecha datetime,
+    usuario_id int,
+    estado ENUM ('pendiente','completado','cancelado') DEFAULT 'pendiente',
+    usuario_id_cancelacion int,
+    motivo_cancelacion text,
+	factura_reparacion_id int,
+	equipo_id int
+);
+
+create table pagos (
+	id int not null AUTO_INCREMENT primary KEY,
+    tipo_factura ENUM ('venta','reparacion') DEFAULT 'venta',
+    factura_reparacion_id int,
+    factura_venta_id int,
+    monto_pagado decimal(20,2),
+    devuelta decimal(20,2),
+    fecha datetime,
+	tipo_pago ENUM('EFECTIVO','CHEQUE','TARJETA DE CREDITO','TRANSFERENCIA BANCARIA'),
+	usuario_id int
+);
+
+create table clientes (
+  id int not null AUTO_INCREMENT PRIMARY KEY,
+  nombre varchar(150),
+  apellido varchar(150),
+  cedula varchar(40),
+  rnc varchar(60),
+    fecha datetime,
+    usuario_id int
+);
+create table cliente_telefono(
+  id int not null AUTO_INCREMENT PRIMARY KEY,
+  telefono varchar(150),
+  tipo ENUM('celular','casa','trabajo','otro'),
+    fecha datetime,
+    usuario_id int
+);
+
+create table cliente_email(
+  id int not null AUTO_INCREMENT PRIMARY KEY,
+  correo varchar(150),
+  fecha datetime,
+    usuario_id int
+);
+alter table `cliente_email` add (visible boolean DEFAULT true);
+alter table `cliente_telefono` add (visible boolean DEFAULT true);
+alter table `compras` add (visible boolean DEFAULT true);
+alter table `factura_reparacion` add (visible boolean DEFAULT true);
+alter table `factura_reparacion_detalle` add (visible boolean DEFAULT true);
+alter table `factura_ventas` add (visible boolean DEFAULT true);
+alter table `factura_venta_detalle` add (visible boolean DEFAULT true);
+alter table `pagos` add (visible boolean DEFAULT true);
+alter table `usuarios` add (visible boolean DEFAULT true);
